@@ -1,0 +1,16 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path('register', views.register, name='register'),
+    path('getAllDevices', views.getAllDevices, name='getAllDevices'),
+    path('postCheckedHostapdConfig', views.postCheckedHostapdConfig, name='postCheckedHostapdConfig'),
+    path('connectDevice', views.connectDevice, name='connectDevice'),
+    path('disconnectDevice', views.disconnectDevice, name='disconnectDevice'),
+    path('getAllClients', views.getAllClients, name='getAllClients'),
+    path('postClientsData', views.postClientsData, name='postClientsData'),
+    path('postDeviceData', views.postDeviceData, name='postDeviceData'),
+
+
+]
