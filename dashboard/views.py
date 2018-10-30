@@ -11,9 +11,6 @@ import time
 import requests
 import traceback
 import os
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import authentication_classes,permission_classes
 
 users = getattr(settings, "USERS", None)
 logged_users = getattr(settings, "LOGGED_USERS", None)
@@ -21,9 +18,10 @@ configs = getattr(settings, "CONFIGS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
 
-with open('./dashboard/variables.json') as f:
-    variables = json.load(f)
-    PASSWORD = variables["_PASSWORD_"]
+# with open('./dashboard/variables.json') as f:
+#     variables = json.load(f)
+#     PASSWORD = variables["_PASSWORD_"]
+PASSWORD=os.environ['OPENAP_HASH_PASSWORD']
 
 
 
