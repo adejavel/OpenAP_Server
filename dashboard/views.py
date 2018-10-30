@@ -18,9 +18,6 @@ configs = getattr(settings, "CONFIGS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
 
-# with open('./dashboard/variables.json') as f:
-#     variables = json.load(f)
-#     PASSWORD = variables["_PASSWORD_"]
 PASSWORD=os.environ['OPENAP_HASH_PASSWORD']
 
 
@@ -54,7 +51,7 @@ def login_required(f):
 
 @require_http_methods(["GET","OPTIONS"])
 def testVersion(request):
-    return JsonResponse({"status": True, "response": "v1.2.5"})
+    return JsonResponse({"status": True, "response": "v1.2.6"})
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
