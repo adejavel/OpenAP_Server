@@ -131,7 +131,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-CLIENT = MongoClient(os.environ['MONGODB_HOST'],27017)
+CLIENT = MongoClient(['10.152.183.206:27017'])
 DB = CLIENT.resource_db
 ACTIONS = DB.action_table
 USERS = DB.users
