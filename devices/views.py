@@ -116,7 +116,6 @@ def register(request):
                     "actual_config": res,
                     "last_login": time.time(),
                     "inSync": False,
-                    "http_tunnel": res["http_tunnel"]
                 }
                 }, upsert=True)
                 return JsonResponse({"status": True, "response": "Success"})
