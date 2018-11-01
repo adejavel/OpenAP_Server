@@ -64,6 +64,7 @@ def register(request):
         dev = devices.find_one({"mac_address": request.mac_address})
         logger.info(dev)
         res = json.loads(request.body)
+        logger.info(res)
         try:
             url = "{}/pingDevice".format(res["http_tunnel"])
             response = requests.request("GET", url)
@@ -74,6 +75,7 @@ def register(request):
             else:
                 code = 0
         except:
+            logger.exception("Error while pinging")
             code = 0
             pass
         if code==1:

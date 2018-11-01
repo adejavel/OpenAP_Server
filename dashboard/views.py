@@ -54,7 +54,7 @@ def login_required(f):
 
 @require_http_methods(["GET","OPTIONS"])
 def testVersion(request):
-    return JsonResponse({"status": True, "response": "v1.2.8"})
+    return JsonResponse({"status": True, "response": "v1.2.10"})
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
