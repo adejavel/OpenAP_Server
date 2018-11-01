@@ -118,6 +118,7 @@ def register(request):
                     "inSync": False,
                 }
                 }, upsert=True)
+                logger.info(request.mac_address)
                 logger.info(devices.find_one({
                     'mac_address': request.mac_address
                 }))
