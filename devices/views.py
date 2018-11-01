@@ -14,7 +14,10 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import authentication_classes,permission_classes
 import traceback
+import logging
 
+
+logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
@@ -59,6 +62,7 @@ def known_device(f):
 def register(request):
     try:
         dev = devices.find_one({"mac_address": request.mac_address})
+        logger.info(dev)
         res = json.loads(request.body)
         try:
             url = "{}/pingDevice".format(res["http_tunnel"])
@@ -103,6 +107,7 @@ def register(request):
                 return JsonResponse({"status": True, "response": "Success"})
             except:
                 print(traceback.print_exc())
+                logger.exception("Failed to get config")
                 devices.update_one({
                     'mac_address': request.mac_address
                 }, {"$set": {

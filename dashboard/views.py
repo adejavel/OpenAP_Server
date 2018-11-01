@@ -11,7 +11,10 @@ import time
 import requests
 import traceback
 import os
+import logging
 
+
+logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
 logged_users = getattr(settings, "LOGGED_USERS", None)
 configs = getattr(settings, "CONFIGS", None)
@@ -51,7 +54,7 @@ def login_required(f):
 
 @require_http_methods(["GET","OPTIONS"])
 def testVersion(request):
-    return JsonResponse({"status": True, "response": "v1.2.6"})
+    return JsonResponse({"status": True, "response": "v1.2.8"})
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
