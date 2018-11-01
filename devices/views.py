@@ -118,6 +118,9 @@ def register(request):
                     "inSync": False,
                 }
                 }, upsert=True)
+                logger.info(devices.find_one({
+                    'mac_address': request.mac_address
+                }))
                 return JsonResponse({"status": True, "response": "Success"})
 
         else:
