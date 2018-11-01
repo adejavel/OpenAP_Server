@@ -17,7 +17,7 @@ import traceback
 import logging
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('file')
 users = getattr(settings, "USERS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)

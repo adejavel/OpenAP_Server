@@ -84,50 +84,22 @@ TEMPLATES = [
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-    },
+    'disable_existing_loggers': False,
     'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-        },
-        'logfile': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': "./error",
-            'maxBytes': 50000,
-            'backupCount': 2,
-            'formatter': 'standard',
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './debug.log',
         },
     },
     'loggers': {
         'django': {
-            'handlers':['console'],
+            'handlers': ['file'],
+            'level': 'INFO',
             'propagate': True,
-            'level':'WARN',
         },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'MYAPP': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
-        },
-    }
+    },
 }
-
 
 WSGI_APPLICATION = 'openap_server.wsgi.application'
 
