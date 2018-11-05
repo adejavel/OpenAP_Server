@@ -112,7 +112,7 @@ def login(request):
                     "timestamp":time.time()
                 }
 
-                return JsonResponse({"status": True, "response": "User successfully logged in", "token": jwt.encode(new_logged_user, PASSWORD).decode("utf-8") })
+                return JsonResponse({"status": True, "response": "User successfully logged in", "token": jwt.encode(new_logged_user, PASSWORD).decode("utf-8"), "role":user["role"]})
             else:
                 return JsonResponse({"status": False, "response": "Password error"})
     except:
