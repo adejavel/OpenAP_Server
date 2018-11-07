@@ -690,7 +690,7 @@ def deleteAllClients(request):
 def newUpdate(request):
     try:
         user = request.user_object
-        body=request.body
+        body=json.loads(request.body)
         logger.info(user)
         if user["role"] in [1,2]:
             new_update = {
