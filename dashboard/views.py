@@ -697,7 +697,8 @@ def newUpdate(request):
                 "versionId": body["versionId"],
                 "actions": body["actions"],
                 "reboot": body["reboot"],
-                "date": time.time()
+                "date": time.time(),
+                "details":body["details"]
             }
             updates.insert_one(new_update)
             return JsonResponse({"status": True, "response": "Update successfully added"})
