@@ -36,16 +36,20 @@ def login_required(f):
                 tok = tokens[1]
                 payload = jwt.decode(tok,PASSWORD)
                 if (time.time()-payload["timestamp"])>60*120:
+                    logger.info("timestamp outdated")
                     return JsonResponse({"status": False, "response": "Login error"})
                 user = users.find_one({"_id":ObjectId(payload["id"])})
                 if user is None:
+                    logger.info("user is none")
                     return JsonResponse({"status": False, "response": "Login error"})
                 args[0].user_object=user
                 return f(*args, **kw)  # Call hello
             else:
+                logger.info("Token error")
                 return JsonResponse({"status": False, "response": "Login error"})
         except:
             print(traceback.print_exc())
+            logger.exception("login error")
             return JsonResponse({"status": False, "response": "Login error"})
     return wrapper
 
