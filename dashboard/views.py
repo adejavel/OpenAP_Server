@@ -687,6 +687,7 @@ def newUpdate(request):
     try:
         user = request.user_object
         body=request.body
+        logger.info(user)
         if user["role"] in [1,2]:
             new_update = {
                 "versionId": body["versionId"],
