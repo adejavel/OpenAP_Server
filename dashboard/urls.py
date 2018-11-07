@@ -33,5 +33,6 @@ urlpatterns = [
     path('getClientById/<slug:id>', views.getClientById, name='getClientById'),
     path('modifyClient/<slug:id>', views.modifyClient, name='modifyClient'),
     path('deleteAllClients', views.deleteAllClients, name='deleteAllClients'),
-
+    path('getUpdates', views.getUpdates, name='getUpdates'),
+    path('newUpdate', views.newUpdate, name='newUpdate'),
 ]

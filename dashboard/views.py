@@ -16,10 +16,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
-logged_users = getattr(settings, "LOGGED_USERS", None)
 configs = getattr(settings, "CONFIGS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
+updates = getattr(settings, "UPDATES", None)
 
 PASSWORD=os.environ['OPENAP_HASH_PASSWORD']
 
@@ -109,7 +109,8 @@ def login(request):
                 new_logged_user = {
                     "id": str(user["_id"]),
                     "email": user['email'],
-                    "timestamp":time.time()
+                    "timestamp":time.time(),
+                    "role":user["role"],
                 }
 
                 return JsonResponse({"status": True, "response": "User successfully logged in", "token": jwt.encode(new_logged_user, PASSWORD).decode("utf-8"), "role":user["role"]})
@@ -673,9 +674,45 @@ def updateLastPing(mac):
 @login_required
 def deleteAllClients(request):
     try:
-        clients.drop()
+        #clients.drop()
         return JsonResponse({"status": True, "response": "Clients dropped"})
 
     except:
         print(traceback.print_exc())
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+@require_http_methods(["POST","OPTIONS"])
+@login_required
+def newUpdate(request):
+    try:
+        user = request.user_object
+        body=request.body
+        if user["role"] in [1,2]:
+            new_update = {
+                "versionId": body["versionId"],
+                "actions": body["actions"],
+                "reboot": body["reboot"],
+                "date": time.time()
+            }
+            updates.insert_one(new_update)
+            return JsonResponse({"status": True, "response": "Update successfully added"})
+        else:
+            return JsonResponse({"status": False, "response": "Authentication error"})
+    except:
+        logger.exception("Error while adding update")
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+
+@require_http_methods(["GET","OPTIONS"])
+@login_required
+def getUpdates(request):
+    try:
+        user = request.user_object
+        if user["role"] in [1,2]:
+            updateDB = updates.find()
+            return HttpResponse(dumps(updateDB), status=200, content_type='application/json')
+        else:
+            return JsonResponse({"status": False, "response": "Authentication error"})
+    except:
+        logger.exception("Error while getting update")
         return JsonResponse({"status": False, "response": "An error occured"})
