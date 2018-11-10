@@ -82,15 +82,16 @@ def register(request):
             try:
                 url = "{}/getConfig".format(res["http_tunnel"])
                 payload = dev
-                print(payload)
+                #print(payload)
                 headers = {
                     'Content-Type': "application/json",
                 }
                 payload["_id"]=str(payload["_id"])
                 response = requests.request("POST", url, json=payload, headers=headers)
-                print(response.text)
+                #print(response.text)
                 updateLastPing(request.mac_address)
                 jsonResp = json.loads(response.text)
+                print(jsonResp['config']["checked_hostapd_config"])
                 devices.update_one({
                     'mac_address': request.mac_address
                 }, {"$set": {
