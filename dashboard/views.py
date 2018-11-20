@@ -410,9 +410,10 @@ def applyConfig(request,id):
                     '_id': ObjectId(id)
                 },
                 {
-                    "$set": {
-                "applied_config": body
-            }
+                "$set": {
+                    "applied_config": body["network_config"],
+                    "policy_config":body["policy_config"]
+                }
             }, upsert=False)
             return JsonResponse({"status": True, "response": "Configuration successfully applied","ping":ping})
         else:
@@ -588,6 +589,7 @@ def getMyClients(request):
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
+
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
