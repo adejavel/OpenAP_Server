@@ -285,7 +285,10 @@ def getAllConfig(request):
     try:
         user=request.user_object
         res = configs.find({'user_id': str(user["_id"])})
-        return HttpResponse(dumps(res), status=200, content_type='application/json')
+        final={
+            "data":res
+        }
+        return HttpResponse(dumps(final), status=200, content_type='application/json')
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
