@@ -721,7 +721,8 @@ def getUpdates(request):
         user = request.user_object
         if user["role"] in [1,2]:
             updateDB = updates.find()
-            return HttpResponse(dumps(updateDB), status=200, content_type='application/json')
+            final = {"updates":updateDB}
+            return HttpResponse(dumps(final), status=200, content_type='application/json')
         else:
             return JsonResponse({"status": False, "response": "Authentication error"})
     except:
