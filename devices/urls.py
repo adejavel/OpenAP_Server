@@ -11,6 +11,8 @@ urlpatterns = [
     path('getAllClients', views.getAllClients, name='getAllClients'),
     path('postClientsData', views.postClientsData, name='postClientsData'),
     path('postDeviceData', views.postDeviceData, name='postDeviceData'),
+    path('getDevicePolicies', views.getDevicePolicies, name='getDevicePolicies'),
+
 
 
 ]
