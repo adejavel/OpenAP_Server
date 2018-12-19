@@ -149,6 +149,17 @@ def getAllDevices(request):
         return JsonResponse({"status": False, "response": "Failed to get all devices"})
 
 @login_required
+@require_http_methods(["GET","OPTIONS"])
+def getDevicePolicies(request):
+    try:
+        updateLastPing(request.mac_address)
+        dev = devices.find_one({"mac_address": request.mac_address})
+        return HttpResponse(dumps(dev["policy_config"]), status=200, content_type='application/json')
+
+    except:
+        return JsonResponse({"status": False, "response": "Failed to get policies"})
+
+@login_required
 @require_http_methods(["POST","OPTIONS"])
 def postCheckedHostapdConfig(request):
     try:
