@@ -154,7 +154,10 @@ def getDevicePolicies(request):
     try:
         updateLastPing(request.mac_address)
         dev = devices.find_one({"mac_address": request.mac_address})
-        return HttpResponse(dumps(dev["policy_config"]), status=200, content_type='application/json')
+        try:
+            return HttpResponse(dumps(dev["policy_config"]), status=200, content_type='application/json')
+        except:
+            return JsonResponse({"status": False, "response": "Policies might not exist"})
 
     except:
         return JsonResponse({"status": False, "response": "Failed to get policies"})
