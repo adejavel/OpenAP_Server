@@ -616,8 +616,14 @@ def getClientsByDevice(request,id):
                     "id": str(dev["_id"]),
                     "name": dev["name"]
                 }
-                cl2["data"]=[cl["data"][-1]]
-                cl2["actions"] = [cl["actions"][-1]]
+                try:
+                    cl2["data"] = [cl["data"][-1]]
+                except:
+                    pass
+                try:
+                    cl2["actions"] = [cl["actions"][-1]]
+                except:
+                    pass
                 finalCl.append(cl2)
             finalRes.extend(finalCl)
             return HttpResponse(dumps(finalRes), status=200, content_type='application/json')
