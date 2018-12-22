@@ -82,6 +82,7 @@ def register(request):
             try:
                 url = "{}/getConfig".format(res["http_tunnel"])
                 payload = dev
+                payload.pop("data",None)
                 #print(payload)
                 headers = {
                     'Content-Type': "application/json",
