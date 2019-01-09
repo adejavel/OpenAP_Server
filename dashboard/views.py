@@ -379,6 +379,16 @@ def applyConfig(request,id):
         res = devices.find_one({'_id': ObjectId(id)})
         if res["user_id"] in getIdsByUser(str(user["_id"])):
             #print("pinging")
+            devices.update_one(
+                {
+                    '_id': ObjectId(id)
+                },
+                {
+                    "$set": {
+                        "applied_config": body["network_config"],
+                        "policy_config": body["policy_config"]
+                    }
+                }, upsert=False)
             ping = pingDevice(id)
             updateLastPing(res["mac_address"])
             if ping:
@@ -408,16 +418,7 @@ def applyConfig(request,id):
                 except:
                     traceback.print_exc()
                     pass
-            devices.update_one(
-                {
-                    '_id': ObjectId(id)
-                },
-                {
-                "$set": {
-                    "applied_config": body["network_config"],
-                    "policy_config":body["policy_config"]
-                }
-            }, upsert=False)
+
             return JsonResponse({"status": True, "response": "Configuration successfully applied","ping":ping})
         else:
             return JsonResponse({"status": False, "response": "Bad user"})
