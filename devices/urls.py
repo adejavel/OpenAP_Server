@@ -12,7 +12,5 @@ urlpatterns = [
     path('postClientsData', views.postClientsData, name='postClientsData'),
     path('postDeviceData', views.postDeviceData, name='postDeviceData'),
     path('getDevicePolicies', views.getDevicePolicies, name='getDevicePolicies'),
-
-
-
+    path('checkDownloadPermission/<slug:key>/<path:path>', views.checkDownloadPermission, name='checkDownloadPermission'),
 ]

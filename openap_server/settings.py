@@ -158,6 +158,7 @@ DEVICES = DB.devices
 CONFIGS = DB.configs
 CLIENTS = DB.clients
 UPDATES = DB.updates
+LINKS = DB.links
 AUTHENTICATION_BACKENDS = 'dashboard.TokenAuthentication'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

@@ -14,6 +14,8 @@ import os
 import logging
 #import urllib2
 from tqdm import tqdm
+import random
+import string
 
 logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
@@ -21,6 +23,7 @@ configs = getattr(settings, "CONFIGS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
 updates = getattr(settings, "UPDATES", None)
+links = getattr(settings, "LINKS", None)
 
 PASSWORD=os.environ['OPENAP_HASH_PASSWORD']
 
@@ -668,27 +671,57 @@ def getStorageByDevice(request,id):
         return JsonResponse({"status": False, "response": "An error occured"})
 
 @require_http_methods(["GET","OPTIONS"])
-#@login_required
-def downloadFile(request,id,path):
+@login_required
+def
+    (request,id,path):
     try:
-        filename = path.encode('utf-8')
-        file_name = filename.split(b"/")[-1]
+        user=request.user_object
         dev = devices.find_one({'_id': ObjectId(id)})
-        url = "{}/downloadFile/{}".format(dev["actual_config"]["http_tunnel"],path)
-        file_path = url
+        if dev["user_id"] in getIdsByUser(str(user["_id"])):
+            ping = pingDevice(id)
+            updateLastPing(dev["mac_address"])
+            if ping:
+                try:
+                    key = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(50))
+                    code =''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(50))
+                    new_link={
+                        "code":code,
+                        "key":key,
+                        "path":path,
+                        "requested":False,
+                        "expire":time.time()+10
+                    }
+                    links.insert_one(new_link)
+                    return JsonResponse({"status": True, "code": code,"key":key})
+                except:
+                    return JsonResponse({"status": False, "response": "Error while creating link"})
+            else:
+                return HttpResponse(dumps({"status": True, "data": []}), status=200, content_type='application/json')
+        else:
+            return JsonResponse({"status": False, "response": "Bad user"})
+    except:
+        traceback.print_exc()
+        return JsonResponse({"status": False, "response": "An error occured"})
 
-        #url = "http://download.thinkbroadband.com/10MB.zip"
-        response = requests.get(url, stream=True)
+@require_http_methods(["GET","OPTIONS"])
+def downloadFile(request,code,key):
+    try:
+        link = links.find_one({"code":code})
+        if link["key"]==key:
+            links.update_one({
+                'code': code
+            }, {"$set":
+                 {
+                    "requested":True
+                 }
 
-        # with open(str(file_name), "wb") as handle:
-        #     for data in tqdm(response.iter_content()):
-        #         handle.write(data)
-        #     with open(str(file_name), "rb") as handle2:
-        #         response = HttpResponse(handle2.read(),content_type='application/force-download')
-        #         response['Content-Disposition'] = 'inline; filename={}'.format(str(file_name))
-        #         return response
-
-        return HttpResponsePermanentRedirect(url)
+                }, upsert=False)
+            path =link['path'].encode('utf-8')
+            dev = devices.find_one({'_id': ObjectId(id)})
+            url = "{}/downloadFile/{}/{}".format(dev["actual_config"]["http_tunnel"],key,path)
+            return HttpResponsePermanentRedirect(url)
+        else:
+            return JsonResponse({"status": False, "response": "User error"})
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})

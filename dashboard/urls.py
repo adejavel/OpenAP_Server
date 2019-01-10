@@ -36,8 +36,7 @@ urlpatterns = [
     path('getUpdates', views.getUpdates, name='getUpdates'),
     path('newUpdate', views.newUpdate, name='newUpdate'),
     path('getStorageByDevice/<slug:id>', views.getStorageByDevice, name='getStorageByDevice'),
-    path('downloadFile/<slug:id>/<path:path>', views.downloadFile, name='downloadFile'),
-
-
+    path('downloadFile/<slug:code>/<slug:key>', views.downloadFile, name='downloadFile'),
+    path('askDownload/<slug:id>/<path:path>', views.askDownload, name='askDownload'),
 
 ]

@@ -21,6 +21,7 @@ logger = logging.getLogger('django')
 users = getattr(settings, "USERS", None)
 devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
+links = getattr(settings, "LINKS", None)
 
 
 def login_required(f):
@@ -181,6 +182,25 @@ def postCheckedHostapdConfig(request):
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "Failed to get all devices"})
+
+
+@login_required
+@require_http_methods(["GET","OPTIONS"])
+def checkDownloadPermission(request,key,path):
+    try:
+        updateLastPing(request.mac_address)
+        link = links.find_one({"key":key})
+        logger.info(link)
+        print(link)
+        if link["requested"]==True and link["expire"]>time.time() and link["path"]==path:
+            links.delete_one({"key":key})
+            return JsonResponse({"status": True})
+        else:
+            return JsonResponse({"status": False})
+
+    except:
+        traceback.print_exc()
+        return JsonResponse({"status": False, "response": "Failed to check permission"})
 
 @login_required
 @require_http_methods(["POST","OPTIONS"])
