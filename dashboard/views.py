@@ -688,7 +688,8 @@ def askDownload(request,id,path):
                         "key":key,
                         "path":path,
                         "requested":False,
-                        "expire":time.time()+10
+                        "expire":time.time()+10,
+                        "id":id
                     }
                     links.insert_one(new_link)
                     return JsonResponse({"status": True, "code": code,"key":key})
@@ -716,7 +717,7 @@ def downloadFile(request,code,key):
 
                 }, upsert=False)
             path =link['path'].encode('utf-8')
-            dev = devices.find_one({'_id': ObjectId(id)})
+            dev = devices.find_one({'_id': ObjectId(link["id"])})
             url = "{}/downloadFile/{}/{}".format(dev["actual_config"]["http_tunnel"],key,path)
             return HttpResponsePermanentRedirect(url)
         else:
