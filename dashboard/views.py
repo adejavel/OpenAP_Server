@@ -672,8 +672,7 @@ def getStorageByDevice(request,id):
 
 @require_http_methods(["GET","OPTIONS"])
 @login_required
-def
-    (request,id,path):
+def askDownload(request,id,path):
     try:
         user=request.user_object
         dev = devices.find_one({'_id': ObjectId(id)})
