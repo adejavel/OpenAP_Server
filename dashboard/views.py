@@ -667,7 +667,7 @@ def getStorageByDevice(request,id):
         return JsonResponse({"status": False, "response": "An error occured"})
 
 @require_http_methods(["GET","OPTIONS"])
-@login_required
+#@login_required
 def downloadFile(request,id,path):
     try:
         filename = path.encode('utf-8')
