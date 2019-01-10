@@ -12,7 +12,8 @@ import requests
 import traceback
 import os
 import logging
-
+import urllib2
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
@@ -675,8 +676,14 @@ def downloadFile(request,id,path):
         dev = devices.find_one({'_id': ObjectId(id)})
         url = "{}/downloadFile/{}".format(dev["actual_config"]["http_tunnel"],path)
         file_path = url
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read())
+
+        #url = "http://download.thinkbroadband.com/10MB.zip"
+        response = requests.get(url, stream=True)
+
+        with open(file_name, "wb") as handle:
+            for data in tqdm(response.iter_content()):
+                handle.write(data)
+            response = HttpResponse(handle.read())
             response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
             return response
     except:
