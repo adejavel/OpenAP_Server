@@ -680,12 +680,13 @@ def downloadFile(request,id,path):
         #url = "http://download.thinkbroadband.com/10MB.zip"
         response = requests.get(url, stream=True)
 
-        with open(file_name, "wbr") as handle:
+        with open(file_name, "wb") as handle:
             for data in tqdm(response.iter_content()):
                 handle.write(data)
-            response = HttpResponse(handle.read())
-            response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
-            return response
+            with open(file_name, "rb") as handle2:
+                response = HttpResponse(handle2.read())
+                response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
+                return response
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
