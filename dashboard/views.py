@@ -685,7 +685,7 @@ def downloadFile(request,id,path):
                 handle.write(data)
             with open(file_name, "rb") as handle2:
                 response = HttpResponse(handle2.read(),content_type='application/force-download')
-                response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
+                response['Content-Disposition'] = 'inline; filename={}'.format(str(file_name))
                 return response
     except:
         traceback.print_exc()
