@@ -12,7 +12,7 @@ import requests
 import traceback
 import os
 import logging
-import urllib2
+#import urllib2
 from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
