@@ -436,7 +436,7 @@ def getMyDevices(request):
             res = devices.find({'user_id': id},{'data': False})
             #res.pop("data",None)
             finalRes.extend(res)
-        return HttpResponse(dumps(finalRes), status=200, content_type='application/json')
+        return HttpResponse({"status": True, "data": dumps(finalRes)}, status=200, content_type='application/json')
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
