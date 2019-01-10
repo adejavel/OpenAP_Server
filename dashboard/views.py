@@ -668,7 +668,7 @@ def getStorageByDevice(request,id):
 
 @require_http_methods(["GET","OPTIONS"])
 @login_required
-def downloadFile(request,device,path):
+def downloadFile(request,id,path):
     try:
         filename = path.encode('utf-8')
         file_name = filename.split("/")[-1]
