@@ -671,7 +671,7 @@ def getStorageByDevice(request,id):
 def downloadFile(request,id,path):
     try:
         filename = path.encode('utf-8')
-        file_name = filename.split("/")[-1]
+        file_name = filename.split(b"/")[-1]
         dev = devices.find_one({'_id': ObjectId(id)})
         url = "{}/downloadFile/{}".format(dev["actual_config"]["http_tunnel"],path)
         file_path = url
