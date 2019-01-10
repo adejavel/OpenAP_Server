@@ -680,10 +680,10 @@ def downloadFile(request,id,path):
         #url = "http://download.thinkbroadband.com/10MB.zip"
         response = requests.get(url, stream=True)
 
-        with open(file_name, "wb") as handle:
+        with open(file_name, "wbr") as handle:
             for data in tqdm(response.iter_content()):
                 handle.write(data)
-            response = HttpResponse(handle)
+            response = HttpResponse(handle.read())
             response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
             return response
     except:
