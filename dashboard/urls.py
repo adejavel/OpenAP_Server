@@ -35,4 +35,7 @@ urlpatterns = [
     path('deleteAllClients', views.deleteAllClients, name='deleteAllClients'),
     path('getUpdates', views.getUpdates, name='getUpdates'),
     path('newUpdate', views.newUpdate, name='newUpdate'),
+    path('getStorageByDevice', views.getStorageByDevice, name='getStorageByDevice'),
+
+
 ]
