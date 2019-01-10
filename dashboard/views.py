@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponsePermanentRedirect
 from django.conf import settings
 from django.http import JsonResponse
 from bson.json_util import dumps
@@ -680,13 +680,15 @@ def downloadFile(request,id,path):
         #url = "http://download.thinkbroadband.com/10MB.zip"
         response = requests.get(url, stream=True)
 
-        with open(str(file_name), "wb") as handle:
-            for data in tqdm(response.iter_content()):
-                handle.write(data)
-            with open(str(file_name), "rb") as handle2:
-                response = HttpResponse(handle2.read(),content_type='application/force-download')
-                response['Content-Disposition'] = 'inline; filename={}'.format(str(file_name))
-                return response
+        # with open(str(file_name), "wb") as handle:
+        #     for data in tqdm(response.iter_content()):
+        #         handle.write(data)
+        #     with open(str(file_name), "rb") as handle2:
+        #         response = HttpResponse(handle2.read(),content_type='application/force-download')
+        #         response['Content-Disposition'] = 'inline; filename={}'.format(str(file_name))
+        #         return response
+
+        return HttpResponsePermanentRedirect(url)
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
