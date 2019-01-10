@@ -683,7 +683,7 @@ def downloadFile(request,id,path):
         with open(file_name, "wb") as handle:
             for data in tqdm(response.iter_content()):
                 handle.write(data)
-            response = HttpResponse(handle.read())
+            response = HttpResponse(handle)
             response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
             return response
     except:
