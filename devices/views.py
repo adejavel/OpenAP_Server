@@ -192,6 +192,7 @@ def checkDownloadPermission(request,key,path):
         link = links.find_one({"key":key})
         logger.info(link)
         path = base64.b64decode(path)
+        path = path.decode("utf-8")
         print(link)
         print(time.time())
         print(path)
