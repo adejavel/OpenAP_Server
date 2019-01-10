@@ -568,6 +568,7 @@ def getDeviceById(request,id):
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "An error occured"})
 
+
 @login_required
 @require_http_methods(["GET","OPTIONS"])
 def getMyClients(request):
@@ -664,6 +665,24 @@ def getStorageByDevice(request,id):
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
+
+@require_http_methods(["GET","OPTIONS"])
+@login_required
+def downloadFile(request,device,path):
+    try:
+        filename = path.encode('utf-8')
+        file_name = filename.split("/")[-1]
+        dev = devices.find_one({'_id': ObjectId(id)})
+        url = "{}/downloadFile/{}".format(dev["actual_config"]["http_tunnel"],path)
+        path_to_file = url
+        response = HttpResponse(mimetype='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename=%s'.format(file_name)
+        #response['X-Sendfile'] = smart_str(path_to_file)
+        return response
+    except:
+        traceback.print_exc()
+        return JsonResponse({"status": False, "response": "An error occured"})
+
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
