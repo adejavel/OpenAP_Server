@@ -716,7 +716,7 @@ def downloadFile(request,code,key):
                  }
 
                 }, upsert=False)
-            path =link['path'].encode('utf-8')
+            path =link['path']
             dev = devices.find_one({'_id': ObjectId(link["id"])})
             url = "{}/downloadFile/{}/{}".format(dev["actual_config"]["http_tunnel"],key,path)
             return HttpResponsePermanentRedirect(url)

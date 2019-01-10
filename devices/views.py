@@ -195,11 +195,11 @@ def checkDownloadPermission(request,key,path):
         print(time.time())
         print(path)
         print(link["path"])
-        print(path.decode("utf-8"))
+        print(path)
         print(link["requested"]==True)
         print(link["expire"]>time.time())
-        print(link["path"]==path.decode("utf-8"))
-        if link["requested"]==True and link["expire"]>time.time() and link["path"].encode('utf-8')==path.decode("utf-8"):
+        print(link["path"]==path)
+        if link["requested"]==True and link["expire"]>time.time() and link["path"].encode('utf-8')==path:
             links.delete_one({"key":key})
             return JsonResponse({"status": True})
         else:
