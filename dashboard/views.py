@@ -674,11 +674,11 @@ def downloadFile(request,id,path):
         file_name = filename.split("/")[-1]
         dev = devices.find_one({'_id': ObjectId(id)})
         url = "{}/downloadFile/{}".format(dev["actual_config"]["http_tunnel"],path)
-        path_to_file = url
-        response = HttpResponse(mimetype='application/force-download')
-        response['Content-Disposition'] = 'attachment; filename=%s'.format(file_name)
-        #response['X-Sendfile'] = smart_str(path_to_file)
-        return response
+        file_path = url
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read())
+            response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
+            return response
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
