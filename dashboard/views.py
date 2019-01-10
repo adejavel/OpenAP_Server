@@ -636,6 +636,37 @@ def getClientsByDevice(request,id):
 
 @login_required
 @require_http_methods(["GET","OPTIONS"])
+def getStorageByDevice(request,id):
+    try:
+        user=request.user_object
+        finalRes=[]
+        dev = devices.find_one({'_id': ObjectId(id)})
+        if dev["user_id"] in getIdsByUser(str(user["_id"])):
+            ping = pingDevice(id)
+            updateLastPing(dev["mac_address"])
+            if ping:
+                try:
+                    url = "{}/getUSBStructure".format(dev["actual_config"]["http_tunnel"])
+                    # print(payload)
+                    headers = {
+                        'Content-Type': "application/json",
+                    }
+                    response = requests.request("GET", url, headers=headers)
+                    resp = json.loads(response.text)
+                    return HttpResponse(dumps({"status":True,"data":resp}), status=200, content_type='application/json')
+                except:
+                    return HttpResponse(dumps({"status": True, "data": []}), status=200,
+                                        content_type='application/json')
+            else:
+                return HttpResponse(dumps({"status": True, "data": []}), status=200, content_type='application/json')
+        else:
+            return JsonResponse({"status": False, "response": "Bad user"})
+    except:
+        traceback.print_exc()
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+@login_required
+@require_http_methods(["GET","OPTIONS"])
 def getClientById(request,id):
     try:
         user=request.user_object
