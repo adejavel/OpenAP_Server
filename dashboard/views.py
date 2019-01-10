@@ -684,7 +684,7 @@ def downloadFile(request,id,path):
             for data in tqdm(response.iter_content()):
                 handle.write(data)
             with open(file_name, "rb") as handle2:
-                response = HttpResponse(handle2.read(),mimetype='application/force-download')
+                response = HttpResponse(handle2.read(),content_type='application/force-download')
                 response['Content-Disposition'] = 'inline; filename={}'.format(file_name)
                 return response
     except:
