@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import authentication_classes,permission_classes
 import traceback
 import logging
-
+import base64
 
 logger = logging.getLogger('django')
 users = getattr(settings, "USERS", None)
@@ -191,14 +191,15 @@ def checkDownloadPermission(request,key,path):
         updateLastPing(request.mac_address)
         link = links.find_one({"key":key})
         logger.info(link)
+        path = base64.b64decode(path)
         print(link)
         print(time.time())
-        print(str(link["path"].encode('utf-8')))
         print(path)
+        print(link["path"])
         print(link["requested"]==True)
         print(link["expire"]>time.time())
-        print(str(link["path"].encode('utf-8'))==path)
-        if link["requested"]==True and link["expire"]>time.time() and str(link["path"].encode('utf-8'))==path:
+        print(link["path"]==path)
+        if link["requested"]==True and link["expire"]>time.time() and link["path"]==path:
             links.delete_one({"key":key})
             return JsonResponse({"status": True})
         else:
