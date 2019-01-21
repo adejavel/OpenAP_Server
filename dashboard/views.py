@@ -151,7 +151,7 @@ def createGroup(request):
 
                 }, upsert=False)
             print(new_group_id)
-            return JsonResponse({"status": True, "response": "Group successfully created","id":str(new_group_id)})
+            return JsonResponse({"status": True, "response": "Group successfully created","id":str(new_group_id.inserted_id)})
         else:
             return JsonResponse({"status": False, "response": "Name error"})
     except:
