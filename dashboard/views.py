@@ -191,7 +191,7 @@ def getUsersByGroup(request,id):
         allUsers=[]
         for us in group["users"]:
             allUsers.append(users.find_one({"_id":ObjectId(us)}))
-        return HttpResponse(dumps(allUsers), content_type="application/json")
+        return HttpResponse(dumps({"status": True, "data": allUsers}), content_type="application/json")
     except:
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "Failed to find all users of group"})
