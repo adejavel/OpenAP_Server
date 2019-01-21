@@ -144,13 +144,13 @@ def createGroup(request):
                 "role": 0,
                 "type":"group"
             }
-            users.insert_one(new_group)
+            new_group = users.insert_one(new_group)
             users.update_one({
                 '_id': request.user_object["_id"]
             }, {"$push": {'groups': str(new_group["_id"])}
 
                 }, upsert=False)
-            return JsonResponse({"status": True, "response": "Group successfully created"})
+            return JsonResponse({"status": True, "response": "Group successfully created","id":str(new_group["_id"])})
         else:
             return JsonResponse({"status": False, "response": "Name error"})
     except:
