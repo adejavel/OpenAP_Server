@@ -150,7 +150,7 @@ def createGroup(request):
             }, {"$push": {'groups': str(new_group["_id"])}
 
                 }, upsert=False)
-            return JsonResponse({"status": True, "response": "Group successfully created","id":str(new_group["_id"])})
+            return JsonResponse({"status": True, "response": "Group successfully created","id":new_group})
         else:
             return JsonResponse({"status": False, "response": "Name error"})
     except:
