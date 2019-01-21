@@ -307,7 +307,7 @@ def getMyGroups(request):
         toRet=[]
         for user_id in ids:
             toRet.append(users.find_one({'_id': ObjectId(user_id)}))
-        return HttpResponse(dumps({"status": True, "data": toRet), status=200, content_type='application/json')
+        return HttpResponse(dumps({"status": True, "data": toRet}), status=200, content_type='application/json')
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
