@@ -190,7 +190,10 @@ def getUsersByGroup(request,id):
         group = users.find_one({"_id": ObjectId(id)})
         allUsers=[]
         for us in group["users"]:
-            allUsers.append(users.find_one({"_id":ObjectId(us)}))
+            try:
+                allUsers.append(users.find_one({"_id":ObjectId(us)}))
+            except:
+                pass
         return HttpResponse(dumps({"status": True, "data": allUsers}), content_type="application/json")
     except:
         print(traceback.print_exc())
