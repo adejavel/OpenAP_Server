@@ -16,6 +16,7 @@ import logging
 from tqdm import tqdm
 import random
 import string
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
@@ -176,6 +177,10 @@ def addUserToGroup(request,id):
             }, {"$push": {'users':str(user["_id"])}
 
                 }, upsert=False)
+            group_name = users.find_one({'_id': ObjectId(id)})["name"]
+            send_mail('[OpenAP] You were added to a new group!', 'Hey!\nThis is a notification to inform you that you were added to OpenAP the group: {}.\n\nOpenAP Team.'.format(group_name), 'openap.contact@gmail.com', [email],
+                      fail_silently=False)
+
             return JsonResponse({"status": True, "response": "User successfully added"})
         else:
             return JsonResponse({"status": False, "response": "Name error"})
