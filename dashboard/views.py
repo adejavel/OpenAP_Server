@@ -206,10 +206,10 @@ def getUsersByGroup(request,id):
 
 @login_required
 @require_http_methods(["DELETE","OPTIONS"])
-def deleteUsersByGroup(request,id):
+def deleteUsersByGroup(request,id,user_id):
     try:
         req = json.loads(request.body)
-        user_id = req["user_id"]
+        #user_id = req["user_id"]
         group = users.find_one({"_id": ObjectId(id)})
         newUsers=[]
         for us in group["users"]:
