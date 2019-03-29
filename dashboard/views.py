@@ -856,7 +856,7 @@ def updateProfile(request):
         user = request.user_object
         body = json.loads(request.body)
         users.update_one({
-            '_id': ObjectId(str(user["id"]))
+            '_id': ObjectId(str(user["_id"]))
         }, {"$set": {'lastname': body["lastname"],'firstname':body["firstname"]}
 
             }, upsert=False)
@@ -871,7 +871,7 @@ def updateProfile(request):
 def getProfile(request):
     try:
         user = request.user_object
-        user_object = users.find_one({"_id": user["id"]})
+        user_object = users.find_one({"_id": user["_id"]})
         final_user={
             "lastname":user_object.get("lastname"),
             "firstname":user_object.get("firstname")
