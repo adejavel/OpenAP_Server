@@ -196,12 +196,7 @@ def getUsersByGroup(request,id):
         allUsers=[]
         for us in group["users"]:
             try:
-                n_user = users.find_one({"_id":ObjectId(us)})
-                allUsers.append({
-                    "email":n_user["email"],
-                    "firstname":n_user["firstname"],
-                    "lastname":n_user["lastname"]
-                })
+                allUsers.append(users.find_one({"_id":ObjectId(us)}))
             except:
                 pass
         return HttpResponse(dumps({"status": True, "data": allUsers}), content_type="application/json")
