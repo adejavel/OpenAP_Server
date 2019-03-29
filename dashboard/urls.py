@@ -38,5 +38,6 @@ urlpatterns = [
     path('getStorageByDevice/<slug:id>', views.getStorageByDevice, name='getStorageByDevice'),
     path('downloadFile/<slug:code>/<slug:key>', views.downloadFile, name='downloadFile'),
     path('askDownload/<slug:id>/<path:path>', views.askDownload, name='askDownload'),
+    path('updateProfile', views.updateProfile, name='updateProfile'),
 
 ]

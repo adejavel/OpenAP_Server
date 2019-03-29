@@ -848,3 +848,20 @@ def getUpdates(request):
     except:
         logger.exception("Error while getting update")
         return JsonResponse({"status": False, "response": "An error occured"})
+
+@require_http_methods(["POST","OPTIONS"])
+@login_required
+def updateProfile(request):
+    try:
+        user = request.user_object
+        body = json.loads(request.body)
+        users.update_one({
+            '_id': ObjectId(str(user["id"]))
+        }, {"$set": {'lastname': body["lastname"],'firstname':body["firstname"]}
+
+            }, upsert=False)
+
+        return JsonResponse({"status": True, "response": "Profile successfully updated"})
+    except:
+        logger.exception("Error while getting update")
+        return JsonResponse({"status": False, "response": "An error occured"})
