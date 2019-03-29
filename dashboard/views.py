@@ -865,3 +865,18 @@ def updateProfile(request):
     except:
         logger.exception("Error while getting update")
         return JsonResponse({"status": False, "response": "An error occured"})
+
+@require_http_methods(["GET","OPTIONS"])
+@login_required
+def getProfile(request):
+    try:
+        user = request.user_object
+        user_object = users.find_one({"_id": user["id"]})
+        final_user={
+            "lastname":user_object.get("lastname"),
+            "firstname":user_object.get("firstname")
+        }
+        return HttpResponse(dumps(final_user), status=200, content_type='application/json')
+    except:
+        logger.exception("Error while getting update")
+        return JsonResponse({"status": False, "response": "An error occured"})
