@@ -1,0 +1,6 @@
+Hey!
+
+Please find here your validation code to change your OpenAP password.
+YOUR CODE: {{ code }}
+
+Your dedicated OpenAP team

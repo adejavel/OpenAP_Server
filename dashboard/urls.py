@@ -41,5 +41,8 @@ urlpatterns = [
     path('updateProfile', views.updateProfile, name='updateProfile'),
     path('getProfile', views.getProfile, name='getProfile'),
     path('checkEmail', views.checkEmail, name='checkEmail'),
+    path('askCodeChangePassword', views.askCodeChangePassword, name='askCodeChangePassword'),
+    path('changePassword', views.changePassword, name='changePassword'),
+
 
 ]

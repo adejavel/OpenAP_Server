@@ -935,3 +935,61 @@ def createCode():
             break
     return code
 
+
+@require_http_methods(["POST","OPTIONS"])
+def askCodeChangePassword(request):
+    try:
+        body = json.loads(request.body)
+        email = body["email"]
+        user_obj = users.find_one({"email":email})
+        if validate_email(email) and user_obj is not None:
+            code = createCode()
+            msg_html = render_to_string('change_pass.html', {'code': code,'firstname':user_obj.get("firstname")})
+            msg_text = render_to_string('change_pass.txt', {'code': code,'firstname':user_obj.get("firstname")})
+            send_mail(
+                '[OpenAP] Your validation code!',
+                msg_text,
+                'openap.contact@gmail.com',
+                [email],
+                html_message=msg_html,
+            )
+            codes.insert_one({
+                "expireAt":time.time()+60,
+                "email":body["email"],
+                "cause":"change_pass",
+                "code":code
+            })
+            return JsonResponse({"status": True, "response": "An email was sent"})
+        else:
+            return JsonResponse({"status": False, "response": "An error occured"})
+    except:
+        logger.exception("Error while getting update")
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+def changePassword(request):
+    try:
+        body = json.loads(request.body)
+        email = body["email"]
+        password= body["password"]
+        password_repeat = body["password_repeat"]
+        code = body["code"]
+        user_obj = users.find_one({"email":email})
+        code_object = codes.find_one({
+            "cause": "change_pass",
+            "email": email,
+            "code": code
+        })
+        if user_obj is not None and code_object is not None and password==password_repeat and password!="":
+            users.update_one({
+                'email': email
+            }, {"$push": {'password': generate_password_hash(password)}
+
+                }, upsert=False)
+            return JsonResponse({"status": True, "response": "Password changed"})
+        else:
+            return JsonResponse({"status": False, "response": "An error occured"})
+    except:
+        logger.exception("Error while getting update")
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+
