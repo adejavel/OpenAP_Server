@@ -969,6 +969,8 @@ def askCodeChangePassword(request):
 def changePassword(request):
     try:
         body = json.loads(request.body)
+        logger.info(body)
+        print(body)
         email = body["email"]
         password= body["password"]
         password_repeat = body["password_repeat"]
