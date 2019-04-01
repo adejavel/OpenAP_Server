@@ -6,3 +6,4 @@ werkzeug
 PyJWT
 requests
 validate_email
+tqdm
