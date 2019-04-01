@@ -984,7 +984,7 @@ def changePassword(request):
         if user_obj is not None and code_object is not None and password==password_repeat and password!="":
             users.update_one({
                 'email': email
-            }, {"$push": {'password': generate_password_hash(password)}
+            }, {"$set": {'password': generate_password_hash(password)}
 
                 }, upsert=False)
             return JsonResponse({"status": True, "response": "Password changed"})
