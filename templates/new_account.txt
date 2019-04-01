@@ -1,0 +1,7 @@
+Hey!
+
+Thanks for creating your account on OpenAP! We are so happy to welcome you here.
+Please find here your activation code to finish your OpenAP account creation.
+YOUR CODE: {{ code }}
+
+Your dedicated OpenAP team

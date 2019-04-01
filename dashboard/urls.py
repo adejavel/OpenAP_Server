@@ -40,7 +40,6 @@ urlpatterns = [
     path('askDownload/<slug:id>/<path:path>', views.askDownload, name='askDownload'),
     path('updateProfile', views.updateProfile, name='updateProfile'),
     path('getProfile', views.getProfile, name='getProfile'),
-
-
+    path('checkEmail', views.checkEmail, name='checkEmail'),
 
 ]

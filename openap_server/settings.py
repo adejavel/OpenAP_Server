@@ -69,7 +69,9 @@ ROOT_URLCONF = 'openap_server.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR + '/templates/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,6 +166,7 @@ DEVICES = DB.devices
 CONFIGS = DB.configs
 CLIENTS = DB.clients
 UPDATES = DB.updates
+CODES = DB.codes
 LINKS = DB.links
 AUTHENTICATION_BACKENDS = 'dashboard.TokenAuthentication'
 REST_FRAMEWORK = {

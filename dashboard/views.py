@@ -17,6 +17,8 @@ from tqdm import tqdm
 import random
 import string
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from validate_email import validate_email
 
 logger = logging.getLogger(__name__)
 users = getattr(settings, "USERS", None)
@@ -25,6 +27,8 @@ devices = getattr(settings, "DEVICES", None)
 clients = getattr(settings, "CLIENTS", None)
 updates = getattr(settings, "UPDATES", None)
 links = getattr(settings, "LINKS", None)
+codes = getattr(settings, "CODES", None)
+
 
 PASSWORD=os.environ['OPENAP_HASH_PASSWORD']
 
@@ -82,20 +86,32 @@ def newUser(request):
         password = req["password"]
         password_repeat = req["password_repeat"]
         email = req["email"]
-        if users.find_one({"email": email}) is not None:
-            return JsonResponse({"status":False,"response":"User already existing"})
-        else:
-            if password == password_repeat and password != "":
-                new_user = {
-                    "email": email,
-                    "password": generate_password_hash(password),
-                    "role": 0,
-                    "type":"user"
-                }
-                users.insert_one(new_user)
-                return JsonResponse({"status": True, "response": "User successfully created"})
+        code = req["code"]
+        code_object = codes.find_one({
+            "cause":"validate_email",
+            "email":email,
+            "code":code
+        })
+        if code_object is not None:
+            if users.find_one({"email": email}) is not None:
+                return JsonResponse({"status": False, "response": "User already existing"})
             else:
-                return JsonResponse({"status": False, "response": "Password error"})
+                if password == password_repeat and password != "":
+                    new_user = {
+                        "email": email,
+                        "password": generate_password_hash(password),
+                        "role": 0,
+                        "type": "user"
+                    }
+                    users.insert_one(new_user)
+                    return JsonResponse({"status": True, "response": "User successfully created"})
+                else:
+                    return JsonResponse({"status": False, "response": "Password error"})
+        else:
+            return JsonResponse({"status": False, "response": "Failed to create user"})
+
+
+
     except:
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "Failed to create user"})
@@ -178,7 +194,9 @@ def addUserToGroup(request,id):
 
                 }, upsert=False)
             group_name = users.find_one({'_id': ObjectId(id)})["name"]
-            send_mail('[OpenAP] You were added to a new group!', 'Hey!\nThis is a notification to inform you that you were added to OpenAP the group: {}.\n\nOpenAP Team.'.format(group_name), 'openap.contact@gmail.com', [email],
+            send_mail('[OpenAP] You were added to a new group!',
+                      'Hey!\nThis is a notification to inform you that you were added to OpenAP the group: {}.\n\nOpenAP Team.'.format(group_name),
+                      'openap.contact@gmail.com', [email],
                       fail_silently=False)
 
             return JsonResponse({"status": True, "response": "User successfully added"})
@@ -880,3 +898,40 @@ def getProfile(request):
     except:
         logger.exception("Error while getting update")
         return JsonResponse({"status": False, "response": "An error occured"})
+
+@require_http_methods(["POST","OPTIONS"])
+def checkEmail(request):
+    try:
+        body = json.loads(request.body)
+        email = body["email"]
+        if validate_email(email) and users.find_one({"email":email}) is None:
+            code = createCode()
+            msg_html = render_to_string('new_account.html', {'code': code})
+            msg_text = render_to_string('new_account.txt', {'code': code})
+            send_mail(
+                '[OpenAP] Your activation code!',
+                msg_text,
+                'openap.contact@gmail.com',
+                [email],
+                html_message=msg_html,
+            )
+            codes.insert_one({
+                "expireAt":time.time()+60,
+                "email":body["email"],
+                "cause":"validate_email",
+                "code":code
+            })
+            return JsonResponse({"status": True, "response": "An email was sent"})
+        else:
+            return JsonResponse({"status": False, "response": "An error occured"})
+    except:
+        logger.exception("Error while getting update")
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+def createCode():
+    while True:
+        code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+        if codes.find_one({"code": code}) is None:
+            break
+    return code
+
