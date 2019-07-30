@@ -3,16 +3,9 @@ from django.conf import settings
 from django.http import JsonResponse
 from bson.json_util import dumps
 import requests
-from bson.objectid import ObjectId
 from django.views.decorators.http import require_http_methods
 import json
-from werkzeug.security import generate_password_hash,check_password_hash
-import jwt
 import time
-import traceback
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import authentication_classes,permission_classes
 import traceback
 import logging
 import base64
