@@ -9,7 +9,7 @@ clients = getattr(settings, "CLIENTS", None)
 class Command(BaseCommand):
     help = 'Drop data from devices and clients'
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **kwargs):
         max_date = time.time()-7*24*60*60
         dvs = devices.find({})
         for device in dvs:
