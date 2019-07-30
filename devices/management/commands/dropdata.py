@@ -33,7 +33,7 @@ class Command(BaseCommand):
                 for d in client_data:
                     if d["timestamp"]>max_date:
                         new_data.append(d)
-                client.update_one({
+                clients.update_one({
                     'mac_address': client["mac_address"]
                 }, {"$set": {
                     "data": new_data,
