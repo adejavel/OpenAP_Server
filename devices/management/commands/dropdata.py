@@ -13,7 +13,7 @@ class Command(BaseCommand):
         max_date = time.time()-7*24*60*60
         dvs = devices.find({})
         for device in dvs:
-            if "data" in device_data:
+            if "data" in device:
                 device_data = device["data"]
                 new_data = []
                 for d in device_data:
@@ -27,7 +27,7 @@ class Command(BaseCommand):
                 }, upsert=False)
         clts = clients.find({})
         for client in clts:
-            if "data" in client_data:
+            if "data" in client:
                 client_data = client["data"]
                 new_data = []
                 for d in client_data:
