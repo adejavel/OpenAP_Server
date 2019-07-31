@@ -260,24 +260,16 @@ def deleteGroup(request):
     try:
         req = json.loads(request.body)
         res = devices.find({'user_id': req["group_id"]})
-        num_res = 0
+        user = request.user_object
         for dvc in res:
-            num_res+=1
-        if num_res==0:
-            users.delete_one({'_id': ObjectId(req["group_id"])})
-            return JsonResponse({"status": True, "response": "Successfully deleted group"})
-        elif "user_id" in req:
-            for dvc in res:
-                devices.update_one({
-                    'mac_address': dvc["mac_address"]
-                }, {"$set": {
-                    "user_id": req["user_id"],
-                }
-                }, upsert=False)
-            users.delete_one({'_id': ObjectId(req["group_id"])})
-            return JsonResponse({"status": True, "response": "Successfully deleted group"})
-        else:
-            return JsonResponse({"status": False, "response": "No backup user"})
+            devices.update_one({
+                'mac_address': dvc["mac_address"]
+            }, {"$set": {
+                "user_id": str(user["_id"]),
+            }
+            }, upsert=False)
+        users.delete_one({'_id': ObjectId(req["group_id"])})
+        return JsonResponse({"status": True, "response": "Successfully deleted group"})
     except:
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "Failed to delete group"})
