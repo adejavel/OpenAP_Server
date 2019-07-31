@@ -632,7 +632,7 @@ def getMyClients(request):
                         pass
                     finalCl.append(cl2)
                 finalRes.extend(finalCl)
-        return HttpResponse(dumps(finalRes), status=200, content_type='application/json')
+        return HttpResponse(dumps({"status": True, "data": finalRes}), status=200, content_type='application/json')
     except:
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
@@ -664,7 +664,7 @@ def getClientsByDevice(request,id):
                     pass
                 finalCl.append(cl2)
             finalRes.extend(finalCl)
-            return HttpResponse(dumps(finalRes), status=200, content_type='application/json')
+            return HttpResponse(dumps({"status": True, "data": finalRes}), status=200, content_type='application/json')
         else:
             return JsonResponse({"status": False, "response": "Bad user"})
     except:
