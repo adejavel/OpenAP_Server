@@ -150,7 +150,7 @@ USE_TZ = True
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'openap.contact@gmail.com'
-with open('password.json') as json_file:
+with open('openap_server/password.json') as json_file:
     data = json.load(json_file)
     EMAIL_HOST_PASSWORD = data["email_password"]
 
