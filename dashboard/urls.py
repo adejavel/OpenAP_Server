@@ -43,6 +43,7 @@ urlpatterns = [
     path('checkEmail', views.checkEmail, name='checkEmail'),
     path('askCodeChangePassword', views.askCodeChangePassword, name='askCodeChangePassword'),
     path('changePassword', views.changePassword, name='changePassword'),
+    path('deleteGroup', views.deleteGroup, name='deleteGroup'),
 
 
 ]

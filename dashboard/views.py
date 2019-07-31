@@ -253,6 +253,32 @@ def deleteUsersByGroup(request,id,user_id):
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "Failed to find all users of group"})
 
+
+@login_required
+@require_http_methods(["POST","OPTIONS"])
+def deleteGroup(request):
+    try:
+        req = json.loads(request.body)
+        res = devices.find({'user_id': req["group_id"]})
+        if len(res)==0:
+            users.delete_one({'_id': ObjectId(req["group_id"])})
+            return JsonResponse({"status": True, "response": "Successfully deleted group"})
+        elif "user_id" in req:
+            for dvc in res:
+                devices.update_one({
+                    'mac_address': dvc["mac_address"]
+                }, {"$set": {
+                    "user_id": req["user_id"],
+                }
+                }, upsert=False)
+            users.delete_one({'_id': ObjectId(req["group_id"])})
+            return JsonResponse({"status": True, "response": "Successfully deleted group"})
+        else:
+            return JsonResponse({"status": False, "response": "No backup user"})
+    except:
+        print(traceback.print_exc())
+        return JsonResponse({"status": False, "response": "Failed to delete group"})
+
 @login_required
 @require_http_methods(["DELETE","OPTIONS"])
 def deleteDevice(request,id):
