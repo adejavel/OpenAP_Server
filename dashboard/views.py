@@ -260,7 +260,10 @@ def deleteGroup(request):
     try:
         req = json.loads(request.body)
         res = devices.find({'user_id': req["group_id"]})
-        if len(res)==0:
+        num_res = 0
+        for dvc in res:
+            num_res+=1
+        if num_res==0:
             users.delete_one({'_id': ObjectId(req["group_id"])})
             return JsonResponse({"status": True, "response": "Successfully deleted group"})
         elif "user_id" in req:
