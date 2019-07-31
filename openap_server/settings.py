@@ -149,7 +149,7 @@ USE_TZ = True
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'openap.contact@gmail.com'
-EMAIL_HOST_PASSWORD = 'O2p0e1n9AP'
+#EMAIL_HOST_PASSWORD = 'O2p0e1n9AP'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
