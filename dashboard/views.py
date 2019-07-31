@@ -896,8 +896,9 @@ def getProfile(request):
         }
         return HttpResponse(dumps(final_user), status=200, content_type='application/json')
     except:
-        logger.exception("Error while getting update")
+        logger.exception("Error while getting profile")
         return JsonResponse({"status": False, "response": "An error occured"})
+
 
 @require_http_methods(["POST","OPTIONS"])
 def checkEmail(request):
