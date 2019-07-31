@@ -413,6 +413,35 @@ def claimDevice(request):
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "An error occured"})
 
+
+@require_http_methods(["POST","OPTIONS"])
+@login_required
+def transferDevice(request):
+    try:
+        if not request.body:
+            return JsonResponse({"status": False, "response": "No data provided"})
+        user=request.user_object
+        body =json.loads(request.body)
+        group_id = body["user_id"]
+        group = users.find_one({'_id': ObjectId(str(group_id))})
+        if group.get("type") != "group":
+            return JsonResponse({"status": False, "response": "Cannot transfer to personal account"})
+        ids = getIdsByUser(str(user["_id"]))
+        if group_id in ids:
+            devices.update_one({
+                'mac_address': body["mac_address"].upper()
+            }, {"$set": {
+                "user_id": group_id,
+            }
+            }, upsert=False)
+            return JsonResponse({"status": True, "response": "Device transfered successfully"})
+        else:
+            return JsonResponse({"status": False, "response": "An error occured"})
+    except:
+        print(traceback.print_exc())
+        return JsonResponse({"status": False, "response": "An error occured"})
+
+
 def getIdsByUser(id):
     user = users.find_one({'_id': ObjectId(id)})
     toRet = []

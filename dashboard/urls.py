@@ -44,6 +44,7 @@ urlpatterns = [
     path('askCodeChangePassword', views.askCodeChangePassword, name='askCodeChangePassword'),
     path('changePassword', views.changePassword, name='changePassword'),
     path('deleteGroup', views.deleteGroup, name='deleteGroup'),
+    path('transferDevice', views.transferDevice, name='transferDevice'),
 
 
 ]
