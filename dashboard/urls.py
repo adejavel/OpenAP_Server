@@ -46,6 +46,7 @@ urlpatterns = [
     path('deleteGroup', views.deleteGroup, name='deleteGroup'),
     path('transferDevice', views.transferDevice, name='transferDevice'),
     path('testIP', views.testIP, name='testIP'),
+    path('setRole', views.setRole, name='setRole'),
 
 
 ]

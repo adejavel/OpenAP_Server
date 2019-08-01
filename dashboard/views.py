@@ -86,6 +86,24 @@ def getUsers(request):
     else:
         return JsonResponse({"status": False, "response": "Not permitted"})
 
+@login_required
+@require_http_methods(["POST","OPTIONS"])
+def setRole(request):
+    user = request.user_object
+    req = json.loads(request.body)
+    if user["role"]>=req["role"]:
+        users.update_one({
+            "_id": ObjectId(req["user_id"])
+        },{
+            "$set":{
+                "role":req["role"]
+            }
+        },upsert=False)
+        return HttpResponse(dumps({"status":True,"data":"Done!"}), content_type="application/json")
+    else:
+        return JsonResponse({"status": False, "response": "Not permitted"})
+
+
 
 @require_http_methods(["POST","OPTIONS"])
 def newUser(request):
