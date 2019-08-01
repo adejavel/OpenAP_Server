@@ -1019,6 +1019,8 @@ def getProfile(request):
         user = request.user_object
         user_object = users.find_one({"_id": user["_id"]})
         final_user={
+            "email":user_object.get("email"),
+            "id":str(user_object.get("_id").get("$oid"))
             "lastname":user_object.get("lastname"),
             "firstname":user_object.get("firstname")
         }
