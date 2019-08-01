@@ -402,6 +402,12 @@ def modifyConfig(request,id):
         return JsonResponse({"status": False, "response": "An error occured"})
 
 @require_http_methods(["POST","OPTIONS"])
+def testIP(request):
+    print(request.META.get('HTTP_X_FORWARDED_FOR'))
+    print(request.META.get('REMOTE_ADDR'))
+    return JsonResponse({"status": True, "response": "An error occured"})
+
+@require_http_methods(["POST","OPTIONS"])
 @login_required
 def claimDevice(request):
     try:
@@ -411,6 +417,10 @@ def claimDevice(request):
         body =json.loads(request.body)
         user_id = body["user_id"]
         ids = getIdsByUser(str(user["_id"]))
+        if body.get("sameIP"):
+            existing_device = devices.find_one({'onboarding_ip': body["mac_address"].upper()})
+        else:
+            existing_device = devices.find_one({'mac_address': body["mac_address"].upper()})
         if user_id in ids:
             devices.update_one({
                 'mac_address': body["mac_address"].upper()
