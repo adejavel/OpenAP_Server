@@ -77,6 +77,10 @@ def getUsers(request):
         all_users = users.find({})
         ret=[]
         for doc in all_users:
+            try:
+                doc.pop("password")
+            except:
+                pass
             ret.append(doc)
         return HttpResponse(dumps({"status":True,"data":ret}), content_type="application/json")
     else:
