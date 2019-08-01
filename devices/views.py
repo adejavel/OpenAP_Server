@@ -55,7 +55,8 @@ def known_device(f):
 @require_http_methods(["POST","OPTIONS"])
 def register(request):
     try:
-        dev = devices.find_one({"mac_address": request.mac_address})
+        dev = devices.find_one({ "$or": [{"mac_address": request.mac_address}, {"onboarding_ip": request.mac_address}]})
+        isNew = dev is None
         logger.info(dev)
         res = json.loads(request.body)
         logger.info(res)
@@ -99,7 +100,8 @@ def register(request):
                     "checked_hostapd_config":jsonResp['config']["checked_hostapd_config"],
                     "applied_config_success": jsonResp["status"],
                     "last_login": time.time(),
-                    "inSync":True
+                    "inSync":True,
+                    "waiting_join": isNew
                 }
                 }, upsert=True)
                 return JsonResponse({"status": True, "response": "Success"})

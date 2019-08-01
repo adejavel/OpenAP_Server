@@ -416,18 +416,48 @@ def claimDevice(request):
         body =json.loads(request.body)
         user_id = body["user_id"]
         ids = getIdsByUser(str(user["_id"]))
-        if body.get("sameIP"):
-            existing_device = devices.find_one({'onboarding_ip': body["mac_address"].upper()})
-        else:
-            existing_device = devices.find_one({'mac_address': body["mac_address"].upper()})
         if user_id in ids:
-            devices.update_one({
-                'mac_address': body["mac_address"].upper()
-            }, {"$set": {
-                "name": body["name"],
-                "user_id": user_id,
-            }
-            }, upsert=True)
+            if body.get("sameIP"):
+                existing_device = devices.find_one({'onboarding_ip': body["public_ip"]})
+                if existing_device is None:
+                    devices.insert_one({
+                        {
+                            'onboarding_ip': body["public_ip"],
+                            "name": body["name"],
+                            "user_id": user_id,
+                            "waiting_join": True
+                        }
+                    })
+                else:
+                    devices.update_one({
+                        'onboarding_ip': body["public_ip"]
+                    }, {"$set": {
+                        "name": body["name"],
+                        "user_id": user_id,
+                        "waiting_join": False
+                    }
+                    }, upsert=False)
+            else:
+                existing_device = devices.find_one({'mac_address': body["mac_address"].upper()})
+                if existing_device is None:
+                    devices.insert_one({
+                        {
+                            'mac_address': body["mac_address"].upper(),
+                            "name": body["name"],
+                            "user_id": user_id,
+                            "waiting_join": True
+                        }
+                    })
+                else:
+                    devices.update_one({
+                        'mac_address': body["mac_address"].upper()
+                    }, {"$set": {
+                        "name": body["name"],
+                        "user_id": user_id,
+                        "waiting_join": False
+                    }
+                    }, upsert=False)
+
             return JsonResponse({"status": True, "response": "Device claimed successfully"})
         else:
             return JsonResponse({"status": False, "response": "An error occured"})
