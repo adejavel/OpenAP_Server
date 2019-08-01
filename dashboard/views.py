@@ -403,8 +403,7 @@ def modifyConfig(request,id):
 
 @require_http_methods(["POST","OPTIONS"])
 def testIP(request):
-    print(request.META.get('HTTP_X_FORWARDED_FOR'))
-    print(request.META.get('REMOTE_ADDR'))
+    print(request.META)
     return JsonResponse({"status": True, "response": "An error occured"})
 
 @require_http_methods(["POST","OPTIONS"])
