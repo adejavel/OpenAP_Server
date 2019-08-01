@@ -72,11 +72,15 @@ def testVersion(request):
 @login_required
 @require_http_methods(["GET","OPTIONS"])
 def getUsers(request):
-    all_users = users.find({})
-    ret=[]
-    for doc in all_users:
-        ret.append(doc)
-    return HttpResponse(dumps([]), content_type="application/json")
+    user = request.user_object
+    if user["role"]==2:
+        all_users = users.find({})
+        ret=[]
+        for doc in all_users:
+            ret.append(doc)
+        return HttpResponse(dumps([]), content_type="application/json")
+    else:
+        return JsonResponse({"status": False, "response": "Not permitted"})
 
 
 @require_http_methods(["POST","OPTIONS"])
