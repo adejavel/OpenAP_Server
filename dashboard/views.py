@@ -78,7 +78,7 @@ def getUsers(request):
         ret=[]
         for doc in all_users:
             ret.append(doc)
-        return HttpResponse(dumps([]), content_type="application/json")
+        return HttpResponse(dumps({"status":True,"data":ret}), content_type="application/json")
     else:
         return JsonResponse({"status": False, "response": "Not permitted"})
 
