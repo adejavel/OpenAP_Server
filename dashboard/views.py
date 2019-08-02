@@ -830,13 +830,15 @@ def getStorageByDevice(request,id):
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "An error occured"})
 
-@require_http_methods(["GET","OPTIONS"])
+@require_http_methods(["POST","OPTIONS"])
 @login_required
-def askDownload(request,id,path):
+def askDownload(request,id):
     try:
         user=request.user_object
         dev = devices.find_one({'_id': ObjectId(id)})
         print("PATH")
+        body = json.loads(request.body)
+        path = body["path"]
         print(path)
         if dev["user_id"] in getIdsByUser(str(user["_id"])):
             ping = pingDevice(id)
