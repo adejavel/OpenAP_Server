@@ -55,10 +55,11 @@ def known_device(f):
 @require_http_methods(["POST","OPTIONS"])
 def register(request):
     try:
-        dev = devices.find_one({ "$or": [{"mac_address": request.mac_address}, {"onboarding_ip": request.mac_address}]})
+        res = json.loads(request.body)
+        dev = devices.find_one({ "$or": [{"mac_address": request.mac_address}, {"onboarding_ip": res["public_ip"]}]})
         isNew = dev is None
         logger.info(dev)
-        res = json.loads(request.body)
+
         logger.info(res)
         try:
             url = "{}/pingDevice".format(res["http_tunnel"])

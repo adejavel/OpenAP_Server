@@ -836,6 +836,8 @@ def askDownload(request,id,path):
     try:
         user=request.user_object
         dev = devices.find_one({'_id': ObjectId(id)})
+        print("PATH")
+        print(path)
         if dev["user_id"] in getIdsByUser(str(user["_id"])):
             ping = pingDevice(id)
             updateLastPing(dev["mac_address"])
