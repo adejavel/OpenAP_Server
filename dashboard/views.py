@@ -856,7 +856,7 @@ def askDownload(request,id):
                         "id":id
                     }
                     links.insert_one(new_link)
-                    return JsonResponse({"status": True, "code": code,"key":key})
+                    return JsonResponse({"status": True, "code": code,"key":key,"id":str(new_link["_id"])})
                 except:
                     return JsonResponse({"status": False, "response": "Error while creating link"})
             else:

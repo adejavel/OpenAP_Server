@@ -184,9 +184,11 @@ def postCheckedHostapdConfig(request):
 
 
 @login_required
-@require_http_methods(["GET","OPTIONS"])
-def checkDownloadPermission(request,key,path):
+@require_http_methods(["POST","OPTIONS"])
+def checkDownloadPermission(request,key):
     try:
+        body = json.loads(request.body)
+        path = body["path"]
         updateLastPing(request.mac_address)
         link = links.find_one({"key":key})
         logger.info(link)
