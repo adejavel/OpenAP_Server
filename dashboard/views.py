@@ -882,7 +882,7 @@ def downloadFile(request,code,key):
                 }, upsert=False)
             path =link['path']
             dev = devices.find_one({'_id': ObjectId(link["id"])})
-            url = "{}/downloadFile/{}/{}".format(dev["actual_config"]["http_tunnel"],key,path)
+            url = "{}/downloadFile/{}/{}".format(dev["actual_config"]["http_tunnel"],key,str(link["_id"]))
             return HttpResponsePermanentRedirect(url)
         else:
             return JsonResponse({"status": False, "response": "User error"})
