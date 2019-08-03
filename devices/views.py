@@ -188,19 +188,19 @@ def postCheckedHostapdConfig(request):
 def checkDownloadPermission(request,key):
     try:
         body = json.loads(request.body)
-        path = body["path"]
+        #path = body["path"]
         updateLastPing(request.mac_address)
         link = links.find_one({"key":key})
         logger.info(link)
-        path = base64.b64decode(path)
-        path = path.decode("utf-8")
+        #path = base64.b64decode(path)
+        #path = path.decode("utf-8")
         print(link)
         print(time.time())
-        print(path)
+        #print(path)
         print(link["path"])
         print(link["requested"]==True)
         print(link["expire"]>time.time())
-        print(link["path"]==path)
+        #print(link["path"]==path)
         if link["requested"]==True and link["expire"]>time.time() and str(link["_id"])==body["id"]:
             links.delete_one({"key":key})
             return JsonResponse({"status": True,"path":link["path"]})
