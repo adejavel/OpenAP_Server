@@ -152,8 +152,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'openap.contact@gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
 
 
 # Static files (CSS, JavaScript, Images)
