@@ -151,9 +151,15 @@ USE_TZ = True
 EMAIL_HOST = 'smtp.live.com'
 EMAIL_HOST_USER = 'openap@outlook.fr'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
-
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'openap@outlook.fr'
+EMAIL_FROM = 'openap@outlook.fr'
+
+
 
 
 # Static files (CSS, JavaScript, Images)
