@@ -446,14 +446,14 @@ def claimDevice(request):
             if body.get("sameIP"):
                 existing_device = devices.find_one({'onboarding_ip': body["public_ip"]})
                 if existing_device is None:
-                    devices.insert_one({
+                    devices.insert_one(
                         {
                             'onboarding_ip': body["public_ip"],
                             "name": body["name"],
                             "user_id": user_id,
                             "waiting_join": True
                         }
-                    })
+                    )
                 else:
                     devices.update_one({
                         'onboarding_ip': body["public_ip"]
@@ -466,14 +466,14 @@ def claimDevice(request):
             else:
                 existing_device = devices.find_one({'mac_address': body["mac_address"].upper()})
                 if existing_device is None:
-                    devices.insert_one({
+                    devices.insert_one(
                         {
                             'mac_address': body["mac_address"].upper(),
                             "name": body["name"],
                             "user_id": user_id,
                             "waiting_join": True
                         }
-                    })
+                    )
                 else:
                     devices.update_one({
                         'mac_address': body["mac_address"].upper()
