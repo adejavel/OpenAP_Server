@@ -222,7 +222,7 @@ def addUserToGroup(request,id):
             group_name = users.find_one({'_id': ObjectId(id)})["name"]
             send_mail('[OpenAP] You were added to a new group!',
                       'Hey!\nThis is a notification to inform you that you were added to OpenAP the group: {}.\n\nOpenAP Team.'.format(group_name),
-                      'openap.contact@gmail.com', [email],
+                      'openap@outlook.fr', [email],
                       fail_silently=False)
 
             return JsonResponse({"status": True, "response": "User successfully added"})
@@ -1046,7 +1046,7 @@ def checkEmail(request):
             send_mail(
                 '[OpenAP] Your activation code!',
                 msg_text,
-                'openap.contact@gmail.com',
+                'openap@outlook.fr',
                 [email],
                 html_message=msg_html,
             )
@@ -1084,7 +1084,7 @@ def askCodeChangePassword(request):
             send_mail(
                 '[OpenAP] Your validation code!',
                 msg_text,
-                'openap.contact@gmail.com',
+                'openap@outlook.fr',
                 [email],
                 html_message=msg_html,
             )
