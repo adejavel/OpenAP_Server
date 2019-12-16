@@ -142,13 +142,24 @@ def authenticate(request):
     try:
         body = json.loads(request.body)
         id = body["id"]
+        mac_address = body["mac_address"]
+        #devices_with_mac = devices.find({"mac_address": mac_address})
+        devices.update(
+            {
+                "mac_address": mac_address
+            },
+            {
+                "$set": {
+                    "mac_address": ""
+                }
+            }, upsert=False)
         devices.update_one(
             {
                 '_id': ObjectId(id)
             },
             {
                 "$set": {
-                    "mac_address": body["mac_address"]
+                    "mac_address": mac_address
                 }
             }, upsert=False)
         return JsonResponse({"status": True})
