@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from django.http import JsonResponse
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import requests
 from django.views.decorators.http import require_http_methods
 import json
@@ -135,6 +136,26 @@ def register(request):
         traceback.print_exc()
         return JsonResponse({"status": False, "response": "Failed to register"})
 
+
+@require_http_methods(["POST","OPTIONS"])
+def authenticate(request):
+    try:
+        body = json.loads(request.body)
+        id = body["id"]
+        devices.update_one(
+            {
+                '_id': ObjectId(id)
+            },
+            {
+                "$set": {
+                    "mac_address": body["mac_address"]
+                }
+            }, upsert=False)
+        return JsonResponse({"status": True})
+
+    except:
+        traceback.print_exc()
+        return JsonResponse({"status": False, "response": "Failed to authenticate"})
 
 
 @require_http_methods(["GET","OPTIONS"])
