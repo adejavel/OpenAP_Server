@@ -526,6 +526,32 @@ def transferDevice(request):
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "An error occured"})
 
+@require_http_methods(["POST","OPTIONS"])
+@login_required
+def renameDevice(request,id):
+    try:
+        if not request.body:
+            return JsonResponse({"status": False, "response": "No data provided"})
+        user=request.user_object
+        body =json.loads(request.body)
+        name = body.get("name")
+        if name is not None and name != "":
+            if group_id in ids:
+                devices.update_one({
+                    '_id': ObjectId(id)
+                }, {"$set": {
+                    "name": name,
+                }
+                }, upsert=False)
+                return JsonResponse({"status": True, "response": "Device renamed successfully"})
+            else:
+                return JsonResponse({"status": False, "response": "An error occured"})
+        else:
+            return JsonResponse({"status": False, "response": "An error occured, incorrect name"})
+    except:
+        print(traceback.print_exc())
+        return JsonResponse({"status": False, "response": "An error occured"})
+
 
 def getIdsByUser(id):
     user = users.find_one({'_id': ObjectId(id)})

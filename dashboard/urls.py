@@ -47,6 +47,7 @@ urlpatterns = [
     path('transferDevice', views.transferDevice, name='transferDevice'),
     path('testIP', views.testIP, name='testIP'),
     path('setRole', views.setRole, name='setRole'),
+    path('renameDevice/<slug:id>', views.renameDevice, name='renameDevice'),
 
 
 ]
