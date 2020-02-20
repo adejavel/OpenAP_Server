@@ -535,8 +535,9 @@ def renameDevice(request,id):
         user=request.user_object
         body =json.loads(request.body)
         name = body.get("name")
-        if name is not None and name != "":
-            if group_id in ids:
+        res = devices.find_one({'_id': ObjectId(id)})
+        if res["user_id"] in getIdsByUser(str(user["_id"])):
+            if name is not None and name != "":
                 devices.update_one({
                     '_id': ObjectId(id)
                 }, {"$set": {
@@ -547,7 +548,7 @@ def renameDevice(request,id):
             else:
                 return JsonResponse({"status": False, "response": "An error occured"})
         else:
-            return JsonResponse({"status": False, "response": "An error occured, incorrect name"})
+            return JsonResponse({"status": False, "response": "An error occured"})
     except:
         print(traceback.print_exc())
         return JsonResponse({"status": False, "response": "An error occured"})
