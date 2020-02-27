@@ -148,7 +148,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-EMAIL_HOST = 'smtp.live.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_HOST_USER = 'openap@outlook.fr'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 EMAIL_PORT = 587
