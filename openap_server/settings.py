@@ -155,7 +155,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 
-EMAIL_BACKEND = 'django_smtp_starttls.SSLv3EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'openap@outlook.fr'
 EMAIL_FROM = 'openap@outlook.fr'
 
